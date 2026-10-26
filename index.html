@@ -2,37 +2,59 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>NEO-PANTHEON Database</title>
-    <!-- Tailwind CSS สำหรับดีไซน์ที่สะอาดและทันสมัย -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEO-PANTHEON Codex</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        body { font-family: 'Prompt', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="p-8">
-    <div class="max-w-7xl mx-auto">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold tracking-wider text-amber-400 mb-2">NEO-PANTHEON ARCHIVE</h1>
-            <p class="text-slate-400">ฐานข้อมูลมหาปรากฏการณ์จุดตัดมิติ นีโอ-เทอร์ร่า</p>
-        </header>
-
-        <!-- ช่องค้นหาและกรองข้อมูล -->
-        <div class="mb-8 flex justify-center">
-            <input type="text" id="searchInput" placeholder="ค้นหาชื่อตัวละคร, รหัส (เช่น NP-001)..." 
-                class="px-4 py-2 w-full max-w-md bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-amber-400 text-white"
-                onkeyup="filterCharacters()">
+<body class="min-h-screen pb-16">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider text-amber-400">NEO-PANTHEON ARCHIVE</h1>
+                <p class="text-xs text-slate-400">ฐานข้อมูลมหาปรากฏการณ์จุดตัดมิติ นีโอ-เทอร์ร่า</p>
+            </div>
+            <!-- Search & Filters -->
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, รหัส (เช่น NP-001)..." 
+                    class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-amber-400 text-white w-full md:w-64"
+                    onkeyup="filterCharacters()">
+                <select id="mythologyFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
+                    <option value="">ทุกตำนาน</option>
+                    <option value="Greek">Greek</option>
+                    <option value="Norse">Norse</option>
+                </select>
+            </div>
         </div>
+    </header>
 
-        <!-- พื้นที่แสดงการ์ดตัวละคร -->
-        <div id="cardContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- ข้อมูลจะถูกโหลดมาแสดงที่นี่ผ่าน JavaScript -->
-            <div class="text-center col-span-full text-slate-500 py-12">กำลังโหลดข้อมูลจากฐานข้อมูล...</div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 mt-8">
+        <div id="cardContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="text-center col-span-full text-slate-500 py-16">กำลังเชื่อมต่อฐานข้อมูล Neo-Terra...</div>
+        </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 bg-slate-800/80 hover:bg-slate-700 text-slate-300 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
+            <div id="modalContent" class="p-6 md:p-8">
+                <!-- ข้อมูลจะถูกเติมเข้ามาที่นี่ -->
+            </div>
         </div>
     </div>
 
     <script>
-        // แทนที่ด้วย Web App URL ที่ได้จากการ Deploy Google Apps Script
+        // แทนที่ด้วย Web App URL ของ Google Apps Script ที่คุณ Deploy ไว้
         const API_URL = "https://script.google.com/macros/s/AKfycbxBt_B0JCzAHu_uWBS8dSlJQfyuMvi1Vo6iesOBGMFCjqEAMOWEdtNe_J4-eCBmk2-Obw/exec";
         let allCharacters = [];
 
@@ -43,7 +65,7 @@
                 displayCharacters(allCharacters);
             } catch (error) {
                 console.error("Error loading data:", error);
-                document.getElementById('cardContainer').innerHTML = `<div class="text-center col-span-full text-red-400">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+                document.getElementById('cardContainer').innerHTML = `<div class="text-center col-span-full text-red-400 py-16">ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้ กรุณาตรวจสอบ URL API</div>`;
             }
         }
 
@@ -52,33 +74,34 @@
             container.innerHTML = "";
 
             if (characters.length === 0) {
-                container.innerHTML = `<div class="text-center col-span-full text-slate-500 py-12">ไม่พบข้อมูลตัวละคร</div>`;
+                container.innerHTML = `<div class="text-center col-span-full text-slate-500 py-16">ไม่พบตัวละครที่ค้นหา</div>`;
                 return;
             }
 
-            characters.forEach(char => {
+            characters.forEach((char, index) => {
+                const imgUrl = char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=Neo-Pantheon';
                 const card = `
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl hover:border-amber-400/50 transition duration-300 flex flex-col justify-between">
+                    <div onclick="openModal(${index})" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/10 transition duration-300 flex flex-col justify-between cursor-pointer group">
                         <div>
-                            <div class="relative h-64 overflow-hidden bg-slate-950">
-                                <img src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=Neo-Pantheon'}" alt="${char.Name_TH}" class="w-full h-full object-cover object-center hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur border border-amber-400/30 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-md uppercase">${char.Char_ID}</span>
-                                <span class="absolute top-3 right-3 bg-amber-500 text-slate-950 text-xs font-bold px-2.5 py-1 rounded-md">${char.Rarity}</span>
+                            <div class="relative h-72 overflow-hidden bg-slate-950">
+                                <img src="${imgUrl}" alt="${char.Name_TH}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                                <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur border border-amber-400/30 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-md">${char.Char_ID}</span>
+                                <span class="absolute top-3 right-3 bg-amber-500 text-slate-950 text-xs font-bold px-2.5 py-1 rounded-md">${char.Rarity || 'SR'}</span>
                             </div>
-                            <div class="p-5">
-                                <div class="text-xs text-amber-400/80 mb-1">${char.Mythology} • ${char.Class_Role} • ${char.Element}</div>
-                                <h3 class="text-xl font-bold text-white mb-1">${char.Name_TH} <span class="text-slate-400 font-normal text-sm">(${char.Name_EN})</span></h3>
-                                <p class="text-xs text-slate-400 mb-4 line-clamp-1">ฉายา: ${char.Title}</p>
-                                <p class="text-sm text-slate-300 line-clamp-3 mb-4">${char.Lore_NeoWorld}</p>
+                            <div class="p-4">
+                                <div class="text-[11px] text-amber-400/80 mb-1 uppercase tracking-wider">${char.Mythology} • ${char.Class_Role}</div>
+                                <h3 class="text-lg font-bold text-white mb-0.5">${char.Name_TH} <span class="text-slate-400 font-normal text-xs">(${char.Name_EN})</span></h3>
+                                <p class="text-xs text-slate-400 line-clamp-1 mb-3">${char.Title || ''}</p>
                             </div>
                         </div>
-                        <div class="px-5 pb-5 pt-0">
-                            <div class="grid grid-cols-5 gap-1 text-center text-xs bg-slate-950 p-2 rounded-lg border border-slate-800/60">
-                                <div><span class="block text-slate-500">ATK</span><span class="font-bold text-amber-400">${char.Stat_ATK}</span></div>
-                                <div><span class="block text-slate-500">DEF</span><span class="font-bold text-amber-400">${char.Stat_DEF}</span></div>
-                                <div><span class="block text-slate-500">SPD</span><span class="font-bold text-amber-400">${char.Stat_SPD}</span></div>
-                                <div><span class="block text-slate-500">HP</span><span class="font-bold text-amber-400">${char.Stat_HP}</span></div>
-                                <div><span class="block text-slate-500">INT</span><span class="font-bold text-amber-400">${char.Stat_INT}</span></div>
+                        <div class="px-4 pb-4 pt-0">
+                            <div class="grid grid-cols-5 gap-1 text-center text-[10px] bg-slate-950 p-2 rounded-lg border border-slate-800/60 text-slate-400">
+                                <div><span class="block text-slate-600 font-bold">ATK</span><span class="text-amber-400 font-semibold">${char.Stat_ATK || 0}</span></div>
+                                <div><span class="block text-slate-600 font-bold">DEF</span><span class="text-amber-400 font-semibold">${char.Stat_DEF || 0}</span></div>
+                                <div><span class="block text-slate-600 font-bold">SPD</span><span class="text-amber-400 font-semibold">${char.Stat_SPD || 0}</span></div>
+                                <div><span class="block text-slate-600 font-bold">HP</span><span class="text-amber-400 font-semibold">${char.Stat_HP || 0}</span></div>
+                                <div><span class="block text-slate-600 font-bold">INT</span><span class="text-amber-400 font-semibold">${char.Stat_INT || 0}</span></div>
                             </div>
                         </div>
                     </div>
@@ -89,13 +112,122 @@
 
         function filterCharacters() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allCharacters.filter(char => 
-                (char.Name_TH && char.Name_TH.toLowerCase().includes(keyword)) ||
-                (char.Name_EN && char.Name_EN.toLowerCase().includes(keyword)) ||
-                (char.Char_ID && char.Char_ID.toLowerCase().includes(keyword)) ||
-                (char.Mythology && char.Mythology.toLowerCase().includes(keyword))
-            );
+            const mythology = document.getElementById('mythologyFilter').value;
+
+            const filtered = allCharacters.filter(char => {
+                const matchKeyword = 
+                    (char.Name_TH && char.Name_TH.toLowerCase().includes(keyword)) ||
+                    (char.Name_EN && char.Name_EN.toLowerCase().includes(keyword)) ||
+                    (char.Char_ID && char.Char_ID.toLowerCase().includes(keyword));
+                
+                const matchMythology = mythology === "" || (char.Mythology && char.Mythology.includes(mythology));
+
+                return matchKeyword && matchMythology;
+            });
+
             displayCharacters(filtered);
+        }
+
+        function openModal(index) {
+            const char = allCharacters[index];
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <!-- Column 1: Image Showcase (Interactive Tabs) -->
+                    <div class="space-y-4">
+                        <div class="relative h-96 rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+                            <img id="activeImageView" src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image'}" alt="${char.Name_TH}" class="w-full h-full object-cover object-top">
+                            <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur border border-amber-400/30 text-amber-400 text-xs font-bold px-3 py-1 rounded-md">${char.Char_ID}</span>
+                        </div>
+                        <!-- Image Switcher Buttons -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="switchImage('${char.Img_Urban_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">ร่าง Urban</button>
+                            <button onclick="switchImage('${char.Img_Myth_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">ร่าง Myth</button>
+                            <button onclick="switchImage('${char.Img_Weapon_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">อาวุธ/ไอเทม</button>
+                        </div>
+                        
+                        <!-- Weapon Info Box -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🛠️ อาวุธประจำตัว: ${char.Weapon_Name || 'ไม่มีข้อมูล'}</h4>
+                            <p class="text-xs text-slate-300">${char.Weapon_Ability || '-'}</p>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Detailed Information -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex items-center gap-2 text-xs text-amber-400 mb-1">
+                                <span>${char.Mythology}</span> • 
+                                <span>${char.Class_Role}</span> • 
+                                <span>ธาตุ ${char.Element}</span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white mb-1">${char.Name_TH} <span class="text-slate-400 text-lg font-normal">(${char.Name_EN})</span></h2>
+                            <p class="text-sm text-slate-400 italic">ฉายา: ${char.Title || '-'}</p>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-5 gap-2 text-center text-xs bg-slate-950 p-3 rounded-xl border border-slate-800">
+                            <div><span class="block text-slate-500 font-bold mb-1">ATK</span><span class="text-amber-400 text-sm font-bold">${char.Stat_ATK || 0}</span></div>
+                            <div><span class="block text-slate-500 font-bold mb-1">DEF</span><span class="text-amber-400 text-sm font-bold">${char.Stat_DEF || 0}</span></div>
+                            <div><span class="block text-slate-500 font-bold mb-1">SPD</span><span class="text-amber-400 text-sm font-bold">${char.Stat_SPD || 0}</span></div>
+                            <div><span class="block text-slate-500 font-bold mb-1">HP</span><span class="text-amber-400 text-sm font-bold">${char.Stat_HP || 0}</span></div>
+                            <div><span class="block text-slate-500 font-bold mb-1">INT</span><span class="text-amber-400 text-sm font-bold">${char.Stat_INT || 0}</span></div>
+                        </div>
+
+                        <!-- Lore Tabs / Sections -->
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">📜 ประวัติดั้งเดิม (Mythological Origin)</h3>
+                                <p class="text-slate-300 text-xs leading-relaxed">${char.Lore_Origin || 'ไม่มีข้อมูลประวัติ'}</p>
+                            </div>
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">🏙️ ชีวิตในนีโอ-เทอร์ร่า (Neo-World Lore)</h3>
+                                <p class="text-slate-300 text-xs leading-relaxed">${char.Lore_NeoWorld || 'ไม่มีข้อมูลเนื้อเรื่อง'}</p>
+                            </div>
+                        </div>
+
+                        <!-- Skills Section -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+                            <h3 class="font-bold text-amber-400 uppercase tracking-wider mb-2">⚡ สกิลและความสามารถ</h3>
+                            <p><strong class="text-amber-300">Passive:</strong> ${char.Skill_Passive || '-'}</p>
+                            <p><strong class="text-amber-300">Active:</strong> ${char.Skill_Active_1 || '-'}</p>
+                            <p><strong class="text-amber-300">Ultimate:</strong> ${char.Skill_Ultimate || '-'}</p>
+                        </div>
+
+                        <!-- Image Generation Prompts -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-[11px]">
+                            <h3 class="font-bold text-amber-400 uppercase tracking-wider mb-2">🎨 Image Generation Prompts (สำหรับสร้างภาพประกอบ)</h3>
+                            <p class="text-slate-400"><strong class="text-slate-300">Urban Prompt:</strong> <br><span class="select-all bg-slate-900 p-1.5 rounded block mt-1 text-slate-300">${char.Prompt_Urban || 'ไม่มีข้อมูล'}</span></p>
+                            <p class="text-slate-400 mt-2"><strong class="text-slate-300">Myth Prompt:</strong> <br><span class="select-all bg-slate-900 p-1.5 rounded block mt-1 text-slate-300">${char.Prompt_Myth || 'ไม่มีข้อมูล'}</span></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchImage(url) {
+            if(url && url !== 'undefined') {
+                document.getElementById('activeImageView').src = url;
+            } else {
+                alert("ตัวละครนี้ยังไม่มีรูปภาพในหมวดหมู่นี้");
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ปิด Modal เมื่อคลิกพื้นที่นอกกล่อง
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
         }
 
         fetchCharacters();
