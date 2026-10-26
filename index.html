@@ -58,6 +58,9 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbxBt_B0JCzAHu_uWBS8dSlJQfyuMvi1Vo6iesOBGMFCjqEAMOWEdtNe_J4-eCBmk2-Obw/exec";
         let allCharacters = [];
 
+        // เก็บข้อมูลตัวละครปัจจุบันที่เปิดดูใน Modal เพื่อใช้สลับรูปภาพและข้อความกำกับ
+        let activeCharData = null;
+
         async function fetchCharacters() {
             try {
                 const response = await fetch(API_URL);
@@ -130,28 +133,29 @@
 
         function openModal(index) {
             const char = allCharacters[index];
+            activeCharData = char; // บันทึกข้อมูลตัวละครปัจจุบัน
             const modal = document.getElementById('detailModal');
             const content = document.getElementById('modalContent');
 
             content.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <!-- Column 1: Image Showcase (Interactive Tabs) -->
+                    <!-- Column 1: Image Showcase (Interactive Tabs with Full Card View) -->
                     <div class="space-y-4">
-                        <div class="relative h-96 rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
-                            <img id="activeImageView" src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image'}" alt="${char.Name_TH}" class="w-full h-full object-cover object-top">
+                        <div class="relative h-[480px] rounded-xl overflow-hidden bg-black border border-slate-800 flex items-center justify-center p-2">
+                            <img id="activeImageView" src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image'}" alt="${char.Name_TH}" class="max-h-full max-w-full object-contain">
                             <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur border border-amber-400/30 text-amber-400 text-xs font-bold px-3 py-1 rounded-md">${char.Char_ID}</span>
                         </div>
                         <!-- Image Switcher Buttons -->
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="switchImage('${char.Img_Urban_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">ร่าง Urban</button>
-                            <button onclick="switchImage('${char.Img_Myth_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">ร่าง Myth</button>
-                            <button onclick="switchImage('${char.Img_Weapon_URL}')" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">อาวุธ/ไอเทม</button>
+                            <button onclick="switchView('urban')" id="btnUrban" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition">ร่าง Urban</button>
+                            <button onclick="switchView('myth')" id="btnMyth" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition">ร่าง Myth</button>
+                            <button onclick="switchView('weapon')" id="btnWeapon" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition">อาวุธ/ไอเทม</button>
                         </div>
                         
-                        <!-- Weapon Info Box -->
-                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🛠️ อาวุธประจำตัว: ${char.Weapon_Name || 'ไม่มีข้อมูล'}</h4>
-                            <p class="text-xs text-slate-300">${char.Weapon_Ability || '-'}</p>
+                        <!-- Dynamic Info Box (Appearance or Weapon Details) -->
+                        <div id="imageCaptionBox" class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🧥 ลักษณะทางกายภาพ (Appearance_Urban)</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">${char.Appearance_Urban || '-'}</p>
                         </div>
                     </div>
 
@@ -195,13 +199,6 @@
                             <p><strong class="text-amber-300">Active:</strong> ${char.Skill_Active_1 || '-'}</p>
                             <p><strong class="text-amber-300">Ultimate:</strong> ${char.Skill_Ultimate || '-'}</p>
                         </div>
-
-                        <!-- Image Generation Prompts -->
-                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-[11px]">
-                            <h3 class="font-bold text-amber-400 uppercase tracking-wider mb-2">🎨 Image Generation Prompts (สำหรับสร้างภาพประกอบ)</h3>
-                            <p class="text-slate-400"><strong class="text-slate-300">Urban Prompt:</strong> <br><span class="select-all bg-slate-900 p-1.5 rounded block mt-1 text-slate-300">${char.Prompt_Urban || 'ไม่มีข้อมูล'}</span></p>
-                            <p class="text-slate-400 mt-2"><strong class="text-slate-300">Myth Prompt:</strong> <br><span class="select-all bg-slate-900 p-1.5 rounded block mt-1 text-slate-300">${char.Prompt_Myth || 'ไม่มีข้อมูล'}</span></p>
-                        </div>
                     </div>
                 </div>
             `;
@@ -209,17 +206,49 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function switchImage(url) {
-            if(url && url !== 'undefined') {
-                document.getElementById('activeImageView').src = url;
-            } else {
-                alert("ตัวละครนี้ยังไม่มีรูปภาพในหมวดหมู่นี้");
+        function switchView(type) {
+            if (!activeCharData) return;
+            
+            const imgView = document.getElementById('activeImageView');
+            const captionBox = document.getElementById('imageCaptionBox');
+            
+            // ปุ่มสลับสถานะ Active
+            const btnUrban = document.getElementById('btnUrban');
+            const btnMyth = document.getElementById('btnMyth');
+            const btnWeapon = document.getElementById('btnWeapon');
+
+            [btnUrban, btnMyth, btnWeapon].forEach(b => {
+                b.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition";
+            });
+
+            if (type === 'urban') {
+                imgView.src = activeCharData.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image';
+                captionBox.innerHTML = `
+                    <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🧥 ลักษณะทางกายภาพ (Appearance_Urban)</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">${activeCharData.Appearance_Urban || '-'}</p>
+                `;
+                btnUrban.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition";
+            } else if (type === 'myth') {
+                imgView.src = activeCharData.Img_Myth_URL || 'https://via.placeholder.com/400x500?text=No-Image';
+                captionBox.innerHTML = `
+                    <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">✨ ลักษณะทางกายภาพ (Appearance_Myth)</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">${activeCharData.Appearance_Myth || '-'}</p>
+                `;
+                btnMyth.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition";
+            } else if (type === 'weapon') {
+                imgView.src = activeCharData.Img_Weapon_URL || 'https://via.placeholder.com/400x500?text=No-Image';
+                captionBox.innerHTML = `
+                    <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🛠️ อาวุธประจำตัว: ${activeCharData.Weapon_Name || 'ไม่มีข้อมูล'}</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">${activeCharData.Weapon_Ability || '-'}</p>
+                `;
+                btnWeapon.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition";
             }
         }
 
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
+            activeCharData = null;
         }
 
         // ปิด Modal เมื่อคลิกพื้นที่นอกกล่อง
