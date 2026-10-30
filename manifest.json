@@ -1,0 +1,23 @@
+{
+  "name": "MYTHOS-GRID",
+  "short_name": "MYTHOS-GRID",
+  "description": "สารานุกรมการ์ดตำนาน",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
