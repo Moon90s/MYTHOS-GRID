@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-
-<meta name="apple-mobile-web-app-title" content="MYTHOS-GRID">
-  <meta name="application-name" content="MYTHOS-GRID">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0f172a">
-  <link rel="apple-touch-icon" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
-  <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-title" content="MYTHOS-GRID">
+    <meta name="application-name" content="MYTHOS-GRID">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://res.cloudinary.com/dh6wsulnr/image/upload/v1793382862/IMG_4001_sauibf.png">
+    <link rel="manifest" href="manifest.json">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,14 +30,16 @@
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-wider text-amber-400">MYTHOS-GRIDARCHIVE</h1>
+                <h1 class="text-2xl font-bold tracking-wider text-amber-400">MYTHOS-GRID ARCHIVE</h1>
                 <p class="text-xs text-slate-400">ฐานข้อมูลมหาปรากฏการณ์จุดตัดมิติ มิธอส-กริด</p>
             </div>
             <!-- Search & Filters -->
             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                 <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, รหัส (เช่น NP-001)..." 
-                    class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-amber-400 text-white w-full md:w-64"
+                    class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-amber-400 text-white w-full md:w-48"
                     onkeyup="filterCharacters()">
+                
+                <!-- Mythology Filter -->
                 <select id="mythologyFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
                     <option value="">ทุกตำนาน</option>
                     <option value="Greek">Greek</option>
@@ -48,7 +49,37 @@
                     <option value="Egyptian">Egyptian</option>
                     <option value="Japanese">Japanese</option>
                     <option value="Hindu">Hindu</option>
+                    <option value="Zoroastrian">Zoroastrian / Shinkoku</option>
                 </select>
+
+                <!-- เพิ่มตัวกรอง Class Filter -->
+                <select id="classFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
+                    <option value="">ทุกคลาส</option>
+                    <option value="Striker">Striker</option>
+                    <option value="Defender">Defender</option>
+                    <option value="Assassin">Assassin</option>
+                    <option value="Controller">Controller</option>
+                    <option value="Support">Support</option>
+                </select>
+
+                <!-- เพิ่มตัวกรอง Rarity Filter -->
+                <select id="rarityFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
+                    <option value="">ทุกระดับ (Rarity)</option>
+                    <option value="Mythic">Mythic</option>
+                    <option value="UR">UR</option>
+                    <option value="SSR">SSR</option>
+                    <option value="SR">SR</option>
+                </select>
+
+                <!-- เพิ่มตัวจัดเรียง (Sort) -->
+                <select id="sortBy" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
+                    <option value="id">เรียงตามรหัส (ID)</option>
+                    <option value="atk_desc">ATK สูง -> ต่ำ</option>
+                    <option value="name_th">ชื่อไทย (ก-ฮ)</option>
+                </select>
+
+                <!-- ปุ่มรีเฟรชเคลียร์แคชข้อมูลสด -->
+                <button onclick="refreshData()" title="โหลดข้อมูลสดจาก Google Sheets" class="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-400 text-xs rounded-lg transition">🔄 ซิงค์ข้อมูล</button>
             </div>
         </div>
     </header>
@@ -70,23 +101,52 @@
         </div>
     </div>
 
+    <!-- Lightbox Modal สำหรับขยายรูปภาพใหญ่ -->
+    <div id="lightboxModal" class="fixed inset-0 z-[100] bg-black/90 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-5xl max-h-[95vh] flex items-center justify-center">
+            <button class="absolute -top-10 right-0 text-white text-xl bg-slate-800 px-3 py-1 rounded-full">✕ ปิด</button>
+            <img id="lightboxImg" src="" alt="Zoomed Image" class="max-w-full max-h-[90vh] object-contain rounded-lg border border-slate-700">
+        </div>
+    </div>
+
     <script>
-        // แทนที่ด้วย Web App URL ของ Google Apps Script ที่คุณ Deploy ไว้
         const API_URL = "https://script.google.com/macros/s/AKfycbxBt_B0JCzAHu_uWBS8dSlJQfyuMvi1Vo6iesOBGMFCjqEAMOWEdtNe_J4-eCBmk2-Obw/exec";
         let allCharacters = [];
-
-        // เก็บข้อมูลตัวละครปัจจุบันที่เปิดดูใน Modal เพื่อใช้สลับรูปภาพและข้อความกำกับ
         let activeCharData = null;
 
-        async function fetchCharacters() {
+        // โหลดข้อมูลพร้อมระบบ Caching (localStorage) เพื่อแก้ปัญหาโหลดช้า
+        async function fetchCharacters(forceRefresh = false) {
+            const cachedData = localStorage.getItem('mythos_characters_cache');
+            const cachedTime = localStorage.getItem('mythos_cache_time');
+            const now = new Date().getTime();
+
+            // ถ้ามีแคชและยังไม่เกิน 1 ชั่วโมง (และไม่ได้บังคับรีเฟรช) ให้ใช้แคชก่อน
+            if (!forceRefresh && cachedData && cachedTime && (now - cachedTime < 3600000)) {
+                allCharacters = JSON.parse(cachedData);
+                filterCharacters();
+                return;
+            }
+
             try {
+                document.getElementById('cardContainer').innerHTML = `<div class="text-center col-span-full text-amber-400/80 py-16 animate-pulse">Loading into the World of MYTHOS-GRID...</div>`;
                 const response = await fetch(API_URL);
                 allCharacters = await response.json();
-                displayCharacters(allCharacters);
+                
+                // บันทึกลง LocalStorage
+                localStorage.setItem('mythos_characters_cache', JSON.stringify(allCharacters));
+                localStorage.setItem('mythos_cache_time', now);
+
+                filterCharacters();
             } catch (error) {
                 console.error("Error loading data:", error);
-                document.getElementById('cardContainer').innerHTML = `<div class="text-center col-span-full text-red-400 py-16">ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้ กรุณาตรวจสอบ URL API</div>`;
+                document.getElementById('cardContainer').innerHTML = `<div class="text-center col-span-full text-red-400 py-16">ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้ กรุณาตรวจสอบ URL API หรือเชื่อมต่ออินเทอร์เน็ต</div>`;
             }
+        }
+
+        function refreshData() {
+            localStorage.removeItem('mythos_characters_cache');
+            localStorage.removeItem('mythos_cache_time');
+            fetchCharacters(true);
         }
 
         function displayCharacters(characters) {
@@ -98,10 +158,10 @@
                 return;
             }
 
-            characters.forEach((char, index) => {
+            characters.forEach((char) => {
                 const imgUrl = char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=Neo-Pantheon';
                 const card = `
-                    <div onclick="openModal(${index})" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/10 transition duration-300 flex flex-col justify-between cursor-pointer group">
+                    <div onclick="openModal('${char.Char_ID}')" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/10 transition duration-300 flex flex-col justify-between cursor-pointer group">
                         <div>
                             <div class="relative h-72 overflow-hidden bg-slate-950">
                                 <img src="${imgUrl}" alt="${char.Name_TH}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
@@ -130,37 +190,59 @@
             });
         }
 
+        // ฟังก์ชัน Filter และ Sort ที่ปรับปรุงใหม่ ป้องกันข้อมูลทับซ้อนและเพี้ยน
         function filterCharacters() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const mythology = document.getElementById('mythologyFilter').value;
+            const classRole = document.getElementById('classFilter').value;
+            const rarity = document.getElementById('rarityFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
 
-            const filtered = allCharacters.filter(char => {
+            let filtered = allCharacters.filter(char => {
                 const matchKeyword = 
                     (char.Name_TH && char.Name_TH.toLowerCase().includes(keyword)) ||
                     (char.Name_EN && char.Name_EN.toLowerCase().includes(keyword)) ||
                     (char.Char_ID && char.Char_ID.toLowerCase().includes(keyword));
                 
-                const matchMythology = mythology === "" || (char.Mythology && char.Mythology.includes(mythology));
+                const matchMythology = mythology === "" || (char.Mythology && char.Mythology.toLowerCase().includes(mythology.toLowerCase()));
+                const matchClass = classRole === "" || (char.Class_Role && char.Class_Role.toLowerCase() === classRole.toLowerCase());
+                const matchRarity = rarity === "" || (char.Rarity && char.Rarity.toLowerCase() === rarity.toLowerCase());
 
-                return matchKeyword && matchMythology;
+                return matchKeyword && matchMythology && matchClass && matchRarity;
+            });
+
+            // จัดเรียงข้อมูล (Sorting)
+            filtered.sort((a, b) => {
+                if (sortBy === 'id') {
+                    return (a.Char_ID || '').localeCompare(b.Char_ID || '');
+                } else if (sortBy === 'atk_desc') {
+                    return (parseInt(b.Stat_ATK) || 0) - (parseInt(a.Stat_ATK) || 0);
+                } else if (sortBy === 'name_th') {
+                    return (a.Name_TH || '').localeCompare(b.Name_TH || '', 'th');
+                }
+                return 0;
             });
 
             displayCharacters(filtered);
         }
 
-        function openModal(index) {
-            const char = allCharacters[index];
-            activeCharData = char; // บันทึกข้อมูลตัวละครปัจจุบัน
+        // แก้ไขปัญหาเปิดข้อมูลผิดตัว / ทับซ้อน โดยค้นหาผ่าน Char_ID แทน Index แถว
+        function openModal(charId) {
+            const char = allCharacters.find(c => c.Char_ID === charId);
+            if (!char) return;
+
+            activeCharData = char;
             const modal = document.getElementById('detailModal');
             const content = document.getElementById('modalContent');
 
             content.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <!-- Column 1: Image Showcase (Interactive Tabs with Full Card View) -->
+                    <!-- Column 1: Image Showcase (คลิกที่รูปเพื่อซูมขยายใหญ่ได้) -->
                     <div class="space-y-4">
-                        <div class="relative h-[480px] rounded-xl overflow-hidden bg-black border border-slate-800 flex items-center justify-center p-2">
-                            <img id="activeImageView" src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image'}" alt="${char.Name_TH}" class="max-h-full max-w-full object-contain">
+                        <div class="relative h-[480px] rounded-xl overflow-hidden bg-black border border-slate-800 flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox(document.getElementById('activeImageView').src)" title="คลิกเพื่อขยายรูป">
+                            <img id="activeImageView" src="${char.Img_Urban_URL || 'https://via.placeholder.com/400x500?text=No-Image'}" alt="${char.Name_TH}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
                             <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur border border-amber-400/30 text-amber-400 text-xs font-bold px-3 py-1 rounded-md">${char.Char_ID}</span>
+                            <div class="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">🔍 คลิกเพื่อขยาย</div>
                         </div>
                         <!-- Image Switcher Buttons -->
                         <div class="grid grid-cols-3 gap-2">
@@ -169,7 +251,7 @@
                             <button onclick="switchView('weapon')" id="btnWeapon" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition">อาวุธ/ไอเทม</button>
                         </div>
                         
-                        <!-- Dynamic Info Box (Appearance or Weapon Details) -->
+                        <!-- Dynamic Info Box -->
                         <div id="imageCaptionBox" class="bg-slate-950 p-4 rounded-xl border border-slate-800">
                             <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🧥 ลักษณะทางกายภาพ (Appearance_Urban)</h4>
                             <p class="text-xs text-slate-300 leading-relaxed">${char.Appearance_Urban || '-'}</p>
@@ -229,7 +311,6 @@
             const imgView = document.getElementById('activeImageView');
             const captionBox = document.getElementById('imageCaptionBox');
             
-            // ปุ่มสลับสถานะ Active
             const btnUrban = document.getElementById('btnUrban');
             const btnMyth = document.getElementById('btnMyth');
             const btnWeapon = document.getElementById('btnWeapon');
@@ -262,13 +343,24 @@
             }
         }
 
+        // ฟังก์ชัน Lightbox สำหรับขยายรูปภาพ
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightboxImg.src = imgSrc;
+            lightbox.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
+        }
+
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
             activeCharData = null;
         }
 
-        // ปิด Modal เมื่อคลิกพื้นที่นอกกล่อง
         window.onclick = function(event) {
             const modal = document.getElementById('detailModal');
             if (event.target === modal) {
