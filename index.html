@@ -28,24 +28,23 @@
 <body class="min-h-screen pb-16">
 
     <!-- 1. หน้าแรก: แผนที่โลก MYTHOS-GRID (World Map View) -->
-    <div id="mapView" class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="max-w-5xl w-full text-center space-y-8">
+    <div id="mapView" class="min-h-screen flex flex-col items-center justify-center p-4 py-12">
+        <div class="max-w-6xl w-full text-center space-y-8">
             <div>
                 <h1 class="text-4xl md:text-5xl font-extrabold tracking-widest text-amber-400 mb-2 drop-shadow-lg">MYTHOS-GRID</h1>
                 <p class="text-sm md:text-base text-slate-400">มหาปรากฏการณ์จุดตัดมิติ • แผนที่ขุมกำลังและเขตแดนแห่งพหุภพ</p>
             </div>
 
-            <!-- โซนแผนที่จำลองแบบกริด/การ์ดพื้นที่ -->
+            <!-- โซนแผนที่หลัก (3 คอลัมน์บน: ฝั่งซ้าย, ตรงกลางสภา, ฝั่งขวา) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                <!-- ฝั่งซ้าย: อาณาจักรเทพโบราณ -->
+                <!-- ฝั่งซ้าย: เทพฝั่งตะวันตก -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 hover:border-amber-400/50 transition">
-                    <h3 class="text-amber-400 font-bold text-lg border-b border-slate-800 pb-2">🏛️ เขตอารยธรรมเทพสากล</h3>
+                    <h3 class="text-amber-400 font-bold text-lg border-b border-slate-800 pb-2">🏛️ เขตอารยธรรมเทพฝั่งตะวันตก</h3>
                     <ul class="space-y-2 text-sm text-slate-300">
-                        <li><button onclick="selectZone('Greek')" class="hover:text-amber-300 transition text-left w-full">⚡ โอลิมปัส & ใต้พิภพ (Greek)</button></li>
-                        <li><button onclick="selectZone('Norse')" class="hover:text-amber-300 transition text-left w-full">❄️ เก้าภพภูมิ (Norse)</button></li>
-                        <li><button onclick="selectZone('Egyptian')" class="hover:text-amber-300 transition text-left w-full">🏜️ ดินแดนแห่งลุ่มแม่น้ำไนล์ (Egyptian)</button></li>
-                        <li><button onclick="selectZone('Hindu')" class="hover:text-amber-300 transition text-left w-full">🔱 พหุภพภารต & กุรุเกษตร (Hindu)</button></li>
-                        <li><button onclick="selectZone('The Styx Syndicate')" class="hover:text-amber-300 transition text-left w-full">👻 สมาคมลับแม่น้ำสติกซ์ (The Styx Syndicate)</button></li>
+                        <li><button onclick="selectZone('Greek', '')" class="hover:text-amber-300 transition text-left w-full">⚡ NEO-PANTHEON⁠ (Greek)</button></li>
+                        <li><button onclick="selectZone('Norse', '')" class="hover:text-amber-300 transition text-left w-full">❄️ RUNE-VALHALLA (Norse)</button></li>
+                        <li><button onclick="selectZone('Egyptian', '')" class="hover:text-amber-300 transition text-left w-full">🏜️ ⁠HELIOPOLIS-DYNASTY (Egyptian)</button></li>
+                        <li><button onclick="selectZone('Christian', '')" class="hover:text-amber-300 transition text-left w-full">🕊️ HOLY-INFERNO⁠ (Christian)</button></li>
                     </ul>
                 </div>
 
@@ -53,29 +52,66 @@
                 <div class="bg-gradient-to-b from-amber-500/10 to-slate-900/90 border border-amber-500/30 rounded-2xl p-6 shadow-xl space-y-4 flex flex-col justify-between text-center">
                     <div>
                         <span class="text-xs bg-amber-500 text-slate-950 font-bold px-2.5 py-1 rounded-full uppercase">ศูนย์กลางอำนาจ</span>
-                        <h3><button onclick="selectZone('The Pantheon Summit')" class="hover:text-amber-400 transition font-bold text-xl mt-3">⚖️ สภาสากลแห่งทวยเทพ</button></h3>
+                        <h3><button onclick="selectZone('', 'The Pantheon Summit')" class="hover:text-amber-400 transition font-bold text-xl mt-3">⚖️ สภาสากลแห่งทวยเทพ</button></h3>
                         <p class="text-xs text-slate-300 mt-2 leading-relaxed">ศูนย์กลางการปกครอง ควบคุมกฎเกณฑ์ และเรียกเก็บภาษีพลังงานจากทุกเขตแดนในพหุภพ</p>
                     </div>
-                    <button onclick="enterArchives('')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-amber-500/20">
+                    <button onclick="enterArchives('', '')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-amber-500/20">
                         🌐 เข้าสู่สารานุกรมทั้งหมด
                     </button>
                 </div>
 
-                <!-- ฝั่งขวา: เขตอารยธรรมตะวันออก & องค์กรพิเศษ -->
+                <!-- ฝั่งขวา: เทพฝั่งตะวันออก -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 hover:border-amber-400/50 transition">
-                    <h3 class="text-amber-400 font-bold text-lg border-b border-slate-800 pb-2">🏮 เขตตะวันออก & ภาคีเงามืด</h3>
+                    <h3 class="text-amber-400 font-bold text-lg border-b border-slate-800 pb-2">🏮 เขตอารยธรรมเทพฝั่งตะวันออก</h3>
                     <ul class="space-y-2 text-sm text-slate-300">
-                        <li><button onclick="selectZone('Chinese')" class="hover:text-amber-300 transition text-left w-full">🐉 แดนมังกรสวรรค์ (Chinese)</button></li>
-                        <li><button onclick="selectZone('Japanese')" class="hover:text-amber-300 transition text-left w-full">⛩️ เกาะศักดิ์สิทธิ์ (Japanese)</button></li>
-                        <li><button onclick="selectZone('The Eclipse Syndicate')" class="hover:text-amber-300 transition text-left w-full">⚙️ ภาคีเงามืด</button></li>
-                        <li><button onclick="selectZone('Zoroastrian')" class="hover:text-amber-300 transition text-left w-full">🔥 ชินโคคุ (Zoroastrian)</button></li>
-                        <li><button onclick="selectZone('Christian')" class="hover:text-amber-300 transition text-left w-full">🕊️ แดนศักดิ์สิทธิ์ (Christian)</button></li>
+                        <li><button onclick="selectZone('Chinese', '')" class="hover:text-amber-300 transition text-left w-full">🐉 ⁠CELESTIAL-DYNASTY (Chinese)</button></li>
+                        <li><button onclick="selectZone('Japanese', '')" class="hover:text-amber-300 transition text-left w-full">⛩️ NEO-YAMATO EMPIRE (Japanese)</button></li>
+                        <li><button onclick="selectZone('Hindu', '')" class="hover:text-amber-300 transition text-left w-full">🔱 VEDIC-AURA⁠ (Hindu)</button></li>
+                        <li><button onclick="selectZone('Zoroastrian', '')" class="hover:text-amber-300 transition text-left w-full">🔥 GAEK-SHINKOKU (Zoroastrian)</button></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="pt-4">
-                <button onclick="enterArchives('')" class="text-xs text-slate-400 hover:text-amber-400 underline transition">
+            <!-- โซนซับเซ็ตย่อยด้านล่าง (ซ้ายเฉียงล่าง: องค์กรทางการ / ขวาเฉียงล่าง: องค์กรลับและอิสระ) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                <!-- ฝั่งซ้ายเฉียงล่าง: องค์กรอย่างเป็นทางการ / องค์กรใหญ่ -->
+                <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-3 hover:border-amber-500/40 transition">
+                    <h4 class="text-amber-400 font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                        🏛️ องค์กรอย่างเป็นทางการ (Official Syndicates & Governments)
+                    </h4>
+                    <p class="text-xs text-slate-400">องค์กรและหน่วยงานโครงสร้างหลักที่ได้รับการรับรองหรือมีบทบาทอย่างเป็นทางการในพหุภพ</p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <button onclick="selectZone('', 'Olympian Corp')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Olympian Corp
+			<button onclick="selectZone('', 'Valhalla Prime')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Valhalla Prime
+			<button onclick="selectZone('', 'The Eden Order')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                           The Eden Order ภาคีศักดิ์สิทธิ์แห่เอเดน
+			<button onclick="selectZone('', 'The Celestial Bureaucracy')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            The Celestial Bureaucracy ศาลสวรรค์ตะวันออก
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ฝั่งขวาเฉียงล่าง: องค์กรลับและองค์กรอิสระ -->
+                <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-3 hover:border-amber-500/40 transition">
+                    <h4 class="text-amber-400 font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                        ⚙️ องค์กรลับและองค์กรอิสระ (Underground & Independent Factions)
+                    </h4>
+                    <p class="text-xs text-slate-400">กลุ่มกบฏ ภาคีใต้ดิน และสมาคมนอกกฎหมายที่ต่อต้านหรืออยู่นอกเหนือการควบคุมของสภาสากล</p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <button onclick="selectZone('', 'The Eclipse Syndicate')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            🌑 ภาคีเงามืด (The Eclipse Syndicate)
+                        </button>
+                        <button onclick="selectZone('', 'The Styx Syndicate')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            👻 สมาคมลับแม่น้ำสติกซ์ (The Styx Syndicate)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button onclick="enterArchives('', '')" class="text-xs text-slate-400 hover:text-amber-400 underline transition">
                     ข้ามแผนที่ และเปิดฐานข้อมูลทั้งหมดทันที (Load All Archives)
                 </button>
             </div>
@@ -99,12 +135,12 @@
                 <!-- Search & Filters -->
                 <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                     <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, รหัส (เช่น NP-001)..." 
-                        class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-amber-400 text-white w-full md:w-44"
+                        class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-amber-400 text-white w-full md:w-40"
                         onkeyup="filterCharacters()">
                     
-                    <!-- Mythology Filter -->
+                    <!-- Mythology Filter (อารยธรรมใหญ่) -->
                     <select id="mythologyFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
-                        <option value="">ทุกตำนาน / โซน</option>
+                        <option value="">ทุกอารยธรรม (Mythology)</option>
                         <option value="Greek">Greek</option>
                         <option value="Norse">Norse</option>
                         <option value="Christian">Christian</option>
@@ -113,9 +149,14 @@
                         <option value="Japanese">Japanese</option>
                         <option value="Hindu">Hindu</option>
                         <option value="Zoroastrian">Zoroastrian / Shinkoku</option>
-                        <option value="The Eclipse Syndicate">The Eclipse Syndicate / ภาคีเงามืด</option>
-                        <option value="The Styx Syndicate">The Styx Syndicate / สมาคมลับแม่น้ำสติกซ์</option>
-                        <option value="The Pantheon Summit">The Pantheon Summit / สภาสากลแห่งทวยเทพ</option>
+                    </select>
+
+                    <!-- Organization Filter (คอลัมน์ G - องค์กร/สังกัด) -->
+                    <select id="organizationFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
+                        <option value="">ทุกองค์กร / สังกัด</option>
+                        <option value="The Pantheon Summit">สภาสากลแห่งทวยเทพ (The Pantheon Summit)</option>
+                        <option value="The Eclipse Syndicate">ภาคีเงามืด (The Eclipse Syndicate)</option>
+                        <option value="The Styx Syndicate">สมาคมลับแม่น้ำสติกซ์ (The Styx Syndicate)</option>
                     </select>
 
                     <!-- Class Filter -->
@@ -215,12 +256,13 @@
             fetchCharacters(true).then(() => filterCharacters());
         }
 
-        // กดเลือกโซนจากแผนที่โลกเพื่อไปหน้าหลักและฟิลเตอร์ตำนานนั้นๆ ทันที
-        function selectZone(mythologyName) {
+        // กดเลือกโซนจากแผนที่โลก (รองรับการกรองทั้งอารยธรรม Mythology และ องค์กร Organization)
+        function selectZone(mythologyName, organizationName) {
             document.getElementById('mapView').classList.add('hidden');
             document.getElementById('archivesView').classList.remove('hidden');
             
             document.getElementById('mythologyFilter').value = mythologyName;
+            document.getElementById('organizationFilter').value = organizationName;
             document.getElementById('searchInput').value = "";
             document.getElementById('classFilter').value = "";
             document.getElementById('rarityFilter').value = "";
@@ -235,11 +277,12 @@
         }
 
         // เข้าสู่หน้าสารานุกรมทั้งหมดโดยไม่เลือกฟิลเตอร์
-        function enterArchives(mythologyName = "") {
+        function enterArchives(mythologyName = "", organizationName = "") {
             document.getElementById('mapView').classList.add('hidden');
             document.getElementById('archivesView').classList.remove('hidden');
             
             document.getElementById('mythologyFilter').value = mythologyName;
+            document.getElementById('organizationFilter').value = organizationName;
             document.getElementById('searchInput').value = "";
             document.getElementById('classFilter').value = "";
             document.getElementById('rarityFilter').value = "";
@@ -261,10 +304,11 @@
             window.scrollTo(0, 0);
         }
 
-        // ฟังก์ชันกรองและจัดเรียงข้อมูล พร้อมจำกัดการแสดงผลครั้งละ 50 ตัว
+        // ฟังก์ชันกรองข้อมูล (รองรับ Multi-Filter ระหว่าง Mythology และ Organization แยกกันอิสระ)
         function filterCharacters() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const mythology = document.getElementById('mythologyFilter').value;
+            const organization = document.getElementById('organizationFilter').value;
             const classRole = document.getElementById('classFilter').value;
             const rarity = document.getElementById('rarityFilter').value;
             const sortBy = document.getElementById('sortBy').value;
@@ -275,14 +319,16 @@
                     (char.Name_EN && char.Name_EN.toLowerCase().includes(keyword)) ||
                     (char.Char_ID && char.Char_ID.toLowerCase().includes(keyword));
                 
+                // แยกจับ Mythology ตรงๆ และ Organization (คอลัมน์ Organization)
                 const matchMythology = mythology === "" || (char.Mythology && char.Mythology.toLowerCase().includes(mythology.toLowerCase()));
+                const matchOrganization = organization === "" || (char.Organization && char.Organization.toLowerCase().includes(organization.toLowerCase()));
                 const matchClass = classRole === "" || (char.Class_Role && char.Class_Role.toLowerCase() === classRole.toLowerCase());
                 const matchRarity = rarity === "" || (char.Rarity && char.Rarity.toLowerCase() === rarity.toLowerCase());
 
-                return matchKeyword && matchMythology && matchClass && matchRarity;
+                return matchKeyword && matchMythology && matchOrganization && matchClass && matchRarity;
             });
 
-            // จัดเรียงข้อมูล (Sorting) - ค่าเริ่มต้นคือตามข้อมูลในชีท (ลำดับเดิมที่ดึงมา)
+            // จัดเรียงข้อมูล (Sorting)
             filteredCharacters.sort((a, b) => {
                 if (sortBy === 'id') {
                     return (a.Char_ID || '').localeCompare(b.Char_ID || '');
@@ -394,8 +440,8 @@
                         <div>
                             <div class="flex items-center gap-2 text-xs text-amber-400 mb-1">
                                 <span>${char.Mythology}</span> • 
-                                <span>${char.Class_Role}</span> • 
-                                <span>ธาตุ ${char.Element}</span>
+                                <span>${char.Organization || 'อิสระ'}</span> • 
+                                <span>${char.Class_Role}</span>
                             </div>
                             <h2 class="text-3xl font-bold text-white mb-1">${char.Name_TH} <span class="text-slate-400 text-lg font-normal">(${char.Name_EN})</span></h2>
                             <p class="text-sm text-slate-400 italic">ฉายา: ${char.Title || '-'}</p>
@@ -463,14 +509,14 @@
                     <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">✨ ลักษณะทางกายภาพ (Appearance_Myth)</h4>
                     <p class="text-xs text-slate-300 leading-relaxed">${activeCharData.Appearance_Myth || '-'}</p>
                 `;
-                btnMyth.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition";
+                btnMyth.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition";
             } else if (type === 'weapon') {
                 imgView.src = activeCharData.Img_Weapon_URL || 'https://via.placeholder.com/400x500?text=No-Image';
                 captionBox.innerHTML = `
                     <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">🛠️ อาวุธประจำตัว: ${activeCharData.Weapon_Name || 'ไม่มีข้อมูล'}</h4>
                     <p class="text-xs text-slate-300 leading-relaxed">${activeCharData.Weapon_Ability || '-'}</p>
                 `;
-                btnWeapon.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-amber-300 font-medium transition";
+                btnWeapon.className = "px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg border border-slate-700 text-slate-400 font-medium transition";
             }
         }
 
