@@ -67,7 +67,7 @@
                         <li><button onclick="selectZone('Chinese', '')" class="hover:text-amber-300 transition text-left w-full">🐉 ⁠CELESTIAL-DYNASTY (Chinese)</button></li>
                         <li><button onclick="selectZone('Japanese', '')" class="hover:text-amber-300 transition text-left w-full">⛩️ NEO-YAMATO EMPIRE (Japanese)</button></li>
                         <li><button onclick="selectZone('Hindu', '')" class="hover:text-amber-300 transition text-left w-full">🔱 VEDIC-AURA⁠ (Hindu)</button></li>
-                        <li><button onclick="selectZone('Zoroastrian', '')" class="hover:text-amber-300 transition text-left w-full">🔥 GAEK-SHINKOKU (Zoroastrian)</button></li>
+                        <li><button onclick="selectZone('Zoroastrian', '')" class="hover:text-amber-300 transition text-left w-full">🌋GAEK-SHINKOKU (Zoroastrian)</button></li>
                     </ul>
                 </div>
             </div>
@@ -82,19 +82,40 @@
                     <p class="text-xs text-slate-400">องค์กรและหน่วยงานโครงสร้างหลักที่ได้รับการรับรองหรือมีบทบาทอย่างเป็นทางการในพหุภพ</p>
                     <div class="flex flex-wrap gap-2 pt-2">
                         <button onclick="selectZone('', 'Olympian Corp')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
-                        	Olympian Corp
-						
+                        	⚡️Olympian Corp สหพันธ์โอลิมปัส
 						</button>
 						<button onclick="selectZone('', 'Valhalla Prime')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
-                            Valhalla Prime
-						
+                           🎖️Valhalla Prime กองบัญชาการรบวัลฮัลลาไพรม์
 						</button>
 						<button onclick="selectZone('', 'The Eden Order')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
-                           The Eden Order ภาคีศักดิ์สิทธิ์แห่เอเดน
-						
+                           🔆The Eden Order ภาคีศักดิ์สิทธิ์แห่งเอเดน
 						</button>
 						<button onclick="selectZone('', 'The Celestial Bureaucracy')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
-                            The Celestial Bureaucracy ศาลสวรรค์ตะวันออก
+                           🪭The Celestial Bureaucracy กรมอาญาเทวะสวรรค์
+                        </button>
+						<button onclick="selectZone('', 'Ennead')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            🏺Ennead มหาสภาเก้าเทวะไอยคุปต์
+                        </button>
+						<button onclick="selectZone('', 'Vedic Pantheon')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            🕉️Vedic Pantheon สมาพันธ์เทวะมันตระ
+                        </button>
+						<button onclick="selectZone('', 'The Seven Deities')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            🏮The Seven Deities สัตตเทวะสภา
+                        </button>
+						<button onclick="selectZone('', 'Amaterasu Corporate Alliance')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                             🏯Amaterasu Corporate Alliance กลุ่มอุตสาหกรรมอามาเทราสึ
+                        </button>
+						<button onclick="selectZone('', 'Jisin Cyber-Shamans')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Jisin Cyber-Shamans สมาคมคนทรงไซเบอร์แห่งฮันซู
+                        </button>
+						<button onclick="selectZone('', 'Ayodhya-Dvaravati Bureau')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Ayodhya-Dvaravati Bureau สำนักอวตารทวารวดี
+                        </button>
+						<button onclick="selectZone('', 'Belobog Energy Syndicate')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Belobog Energy Syndicate กลุ่มพลังงานสลาฟ
+                        </button>
+						<button onclick="selectZone('', 'Imperial Onmyo Bureau')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg transition">
+                            Imperial Onmyo Bureau สำนักองเมียวจิหลวง
                         </button>
                     </div>
                 </div>
@@ -157,16 +178,33 @@
                         <option value="Zoroastrian">Zoroastrian / Shinkoku</option>
                     </select>
 
+                    
                     <!-- Organization Filter (คอลัมน์ G - องค์กร/สังกัด) -->
                     <select id="organizationFilter" onchange="filterCharacters()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300 focus:outline-none focus:border-amber-400">
                         <option value="">ทุกองค์กร / สังกัด</option>
+                        
+                        <!-- องค์กรหลักที่ขึ้นตรงกับสภา -->
                         <option value="The Pantheon Summit">สภาสากลแห่งทวยเทพ (The Pantheon Summit)</option>
-						<option value="Olympian Corp">Olympian Corp</option>
-						<option value="Valhalla Prime">Valhalla Prime</option>
-						<option value="The Eden Order">ภาคีศักดิ์สิทธิ์แห่เอเดน (The Eden Order)</option>
-						<option value="The Celestial Bureaucracy">ศาลสวรรค์ตะวันออก (The Celestial Bureaucracy)</option>
+                        <option value="Olympian Corp">สหพันธ์โอลิมปัส (Olympian Corp)</option>
+                        <option value="Valhalla Prime">กองบัญชาการรบวัลฮัลลาไพรม์ (Valhalla Prime)</option>
+                        <option value="The Eden Order">ภาคีศักดิ์สิทธิ์แห่งเอเดน (The Eden Order)</option>
+                        <option value="The Celestial Bureaucracy">กรมอาญาเทวะสวรรค์ (The Celestial Bureaucracy)</option>
+                        <option value="Ennead">มหาสภาเก้าเทวะไอยคุปต์ (Ennead)</option>
+                        <option value="Vedic Pantheon">สมาพันธ์เทวะมันตระ (Vedic Pantheon)</option>
+                        <option value="The Seven Deities">สัตตเทวะสภา (The Seven Deities)</option>
+                        <option value="Amaterasu Corporate Alliance">กลุ่มอุตสาหกรรมอามาเทราสึ (Amaterasu Corporate Alliance)</option>
+                        <option value="Jisin Cyber-Shamans">สมาคมคนทรงไซเบอร์แห่งฮันซู (Jisin Cyber-Shamans)</option>
+                        <option value="The Seven Deities">สัตตเทวะสภา (The Seven Deities)</option>
+                        
+                        <!-- ฝั่งองค์กรอิสระหรือพันธมิตรสภาสากล -->
+                        <option value="Imperial Onmyo Bureau">สำนักองเมียวจิหลวง (Imperial Onmyo Bureau)</option>
+                        
+                    
+                        <!-- องค์กรลับและองค์กรอิสระอื่นๆ -->
                         <option value="The Eclipse Syndicate">ภาคีเงามืด (The Eclipse Syndicate)</option>
                         <option value="The Styx Syndicate">สมาคมลับแม่น้ำสติกซ์ (The Styx Syndicate)</option>
+                        <option value="Hyakki Yakou Syndicate">สมาพันธ์ร้อยอสูรราตรี (Hyakki Yakou Syndicate)</option>
+                        <option value="Takamagahara Syndicate">สมาพันธ์วิกาลทากามะงาฮาระ (Takamagahara Syndicate)</option>
                     </select>
 
                     <!-- Class Filter -->
